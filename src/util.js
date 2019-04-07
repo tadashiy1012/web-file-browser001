@@ -1,3 +1,5 @@
+import * as deepmerge from 'deepmerge';
+
 function getDirStructure(dirs) {
     let dir = {};
     for (;;) {
@@ -6,8 +8,12 @@ function getDirStructure(dirs) {
         if (next.lastIndexOf('/') > 0) {
             const parent = next.substring(1).split('/')[0];
             const child = next.substring(next.indexOf(parent) + parent.length);
-            if (!dir[parent]) dir[parent] = {};
-            dir[parent] = Object.assign(dir[parent], getDirStructure([child]));
+            const result = getDirStructure([child]);
+            if (!dir[parent]) {
+                dir[parent] = result;
+            } else {
+                dir[parent] = deepmerge(dir[parent], result);
+            }
         } else {
             dir[next.substring(1)] = {};
         }

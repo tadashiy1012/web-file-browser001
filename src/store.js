@@ -28,6 +28,8 @@ const actions = {
         const contents = await state.client.getDirectoryContents('', {deep: true});
         const dirs = contents.filter(e => e.type == 'directory').map(e => e.filename);
         const struct = getDirStructure(dirs);
+        const obj = JSON.parse(JSON.stringify(struct));
+        console.log(obj);
         commit('setDirectories', struct);
     }
 };
