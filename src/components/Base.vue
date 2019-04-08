@@ -18,6 +18,10 @@ export default {
             const dirs = this.$store.getters.directories;
             return dirs;
         }
+    },
+    mounted() {
+        const ul = this.$el.querySelector('ul');
+        ul.classList.remove('disabled');
     }
 }
 </script>
@@ -29,7 +33,7 @@ export default {
     flex-direction: row;
 }
 .left {
-    width: 200px;
+    width: 260px;
 }
 .right {
     width: 100%;
