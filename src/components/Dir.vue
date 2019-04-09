@@ -1,26 +1,24 @@
 <template>
-    <ul class="dir disabled">
-        <template  v-for="(val, key, i) in directory">
+    <ul :class="'dir disabled ' + (root ? 'root': 'child')">
+        <template v-for="(val, key, i) in directory">
             <li :key="i">
                 <span class="arrow" @click="onClickArrow">
                     <span class="close">▶</span>
                     <span class="open disabled">▼</span>
                 </span>
-                <span>{{key}}</span>
-                <template v-if="Object.keys(val).length > 0">
-                    <ul class="dir disabled">
-                    <template v-for="(cval, ckey, ii) in val">
-                        <li :key="ii">
-                            <span class="arrow" @click="onClickArrow">
-                                <span class="close">▶</span>
-                                <span class="open disabled">▼</span>
-                            </span>
-                            <span>{{ckey}}</span>
-                            <dir :directory="cval" />
-                        </li>
-                    </template>
-                    </ul>
+                <span class="path" @click="onClickLabel">{{key}}</span>
+                <ul v-if="Object.keys(val).length > 0" class="dir disabled">
+                <template v-for="(cval, ckey, ii) in val">
+                    <li :key="ii">
+                        <span class="arrow" @click="onClickArrow">
+                            <span class="close">▶</span>
+                            <span class="open disabled">▼</span>
+                        </span>
+                        <span class="path" @click="onClickLabel">{{ckey}}</span>
+                        <dir :directory="cval" :root="false" />
+                    </li>
                 </template>
+                </ul>
             </li>
         </template>
     </ul>
@@ -30,7 +28,7 @@ import Dir from './Dir.vue';
 export default {
     name: 'dir',
     components: { Dir },
-    props: ['directory'],
+    props: ['root', 'directory'],
     methods: {
         onClickArrow(ev) {
             const arrow = ev.target.parentNode;
@@ -42,6 +40,9 @@ export default {
             if (child) {
                 child.classList.toggle('disabled');
             }
+        },
+        onClickLabel(ev) {
+            console.log('click!');
         }
     }
 }

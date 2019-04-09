@@ -2,7 +2,7 @@
     <div class="baseContainer">
         <div class="left">
             <h4>navi</h4>
-            <dir :directory="directories" />
+            <dir :directory="directories" :root="true" />
         </div>
         <div class="right">
             <router-view />

@@ -30,7 +30,7 @@ const actions = {
         const struct = getDirStructure(dirs);
         const obj = JSON.parse(JSON.stringify(struct));
         console.log(obj);
-        commit('setDirectories', struct);
+        //commit('setDirectories', struct);
     }
 };
 
