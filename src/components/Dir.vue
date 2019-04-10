@@ -1,24 +1,34 @@
 <template>
     <ul :class="'dir disabled ' + (root ? 'root': 'child')">
-        <template v-for="(val, key, i) in directory">
-            <li :key="i">
+        <template v-for="(val, idx) in directory">
+            <li :key="idx">
                 <span class="arrow" @click="onClickArrow">
                     <span class="close">▶</span>
                     <span class="open disabled">▼</span>
                 </span>
-                <span class="path" @click="onClickLabel">{{key}}</span>
-                <ul v-if="Object.keys(val).length > 0" class="dir disabled">
-                <template v-for="(cval, ckey, ii) in val">
-                    <li :key="ii">
-                        <span class="arrow" @click="onClickArrow">
-                            <span class="close">▶</span>
-                            <span class="open disabled">▼</span>
-                        </span>
-                        <span class="path" @click="onClickLabel">{{ckey}}</span>
-                        <dir :directory="cval" :root="false" />
-                    </li>
+                <span class="path">
+                    <router-link :to="'/catalog/' + val.path.substring(1).replace(/\//gi, '-') + val.name">
+                        {{val.name !== '' ? val.name : '/'}}
+                    </router-link>
+                </span>
+                <template v-if="val.child.length > 0">
+                    <ul class="dir disabled">
+                    <template v-for="(cval, ii) in val.child">
+                        <li :key="ii">
+                            <span class="arrow" @click="onClickArrow">
+                                <span class="close">▶</span>
+                                <span class="open disabled">▼</span>
+                            </span>
+                            <span class="path">
+                                <router-link :to="'/catalog/' + cval.path.substring(1).replace(/\//gi, '-')  + cval.name">
+                                    {{cval.name}}
+                                </router-link>
+                            </span>
+                            <dir :directory="cval.child" :root="false" />
+                        </li>
+                    </template>
+                    </ul>
                 </template>
-                </ul>
             </li>
         </template>
     </ul>
@@ -40,9 +50,6 @@ export default {
             if (child) {
                 child.classList.toggle('disabled');
             }
-        },
-        onClickLabel(ev) {
-            console.log('click!');
         }
     }
 }

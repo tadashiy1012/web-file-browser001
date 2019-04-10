@@ -1,6 +1,6 @@
 import * as deepmerge from 'deepmerge';
 
-function getDirStructure(dirs, path = '') {
+function getDirStructure(dirs, path = '/') {
     let dir = [];
     for (;;) {
         let next = dirs.shift()
@@ -8,7 +8,7 @@ function getDirStructure(dirs, path = '') {
         if (next.lastIndexOf('/') > 0) {
             const parent = next.substring(1).split('/')[0];
             const child = next.substring(next.indexOf(parent) + parent.length);
-            const result = getDirStructure([child], path + '/' + parent)[0];
+            const result = getDirStructure([child], path + parent + '/')[0];
             let tgt = dir.find(e => e.name === parent);
             if (tgt) {
                 let ctgt = tgt.child.find(e => e.name === result.name);

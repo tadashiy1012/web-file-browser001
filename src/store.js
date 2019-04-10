@@ -2,35 +2,55 @@ import {getDirStructure} from './util';
 
 const state = {
     client: null,
-    directories: {}
+    structure: [],
+    directories: [],
+    files: []
 };
 
 const getters = {
     client: state => state.client,
-    directories: state => state.directories
+    structure: state => state.structure,
+    directories: state => state.directories,
+    files: state => state.files
 };
 
 const mutations = {
     setClient(state, payload) {
-        state.client = payload;
+        state.client = payload.client;
+    },
+    setStructure(state, payload) {
+        state.structure = [...payload.structure];
     },
     setDirectories(state, payload) {
-        state.directories = payload;
+        state.directories = [...payload.directories];
+    },
+    setFiles(state, payload) {
+        state.files = [...payload.files];
     }
 };
 
 const actions = {
     setClient({commit}, payload) {
-        commit('setClient', payload);
+        commit('setClient', {client: payload});
     },
-    async setDirectories({commit, state}) {
+    async setStructure({commit, state}) {
         if (!state.client) return;
         const contents = await state.client.getDirectoryContents('', {deep: true});
         const dirs = contents.filter(e => e.type == 'directory').map(e => e.filename);
-        const struct = getDirStructure(dirs);
-        const obj = JSON.parse(JSON.stringify(struct));
-        console.log(obj);
-        //commit('setDirectories', struct);
+        const struct = [{name: '', path: '/', child: getDirStructure(dirs)}];
+        commit('setStructure', {structure: struct});
+    },
+    async setDirectories({commit, state}, path) {
+        if (!state.client) return;
+        const contents = await state.client.getDirectoryContents(path);
+        const dirs = contents.filter(e => e.type == 'directory');
+        commit('setDirectories', {directories: dirs});
+    },
+    async setFiles({commit, state}, path) {
+        if (!state.client) return;
+        const contents = await state.client.getDirectoryContents(path);
+        const files = contents.filter(e => e.type == 'file');
+        commit('setFiles', {files});
     }
 };
 
