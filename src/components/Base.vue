@@ -1,7 +1,8 @@
 <template>
     <div class="baseContainer">
         <div class="left">
-            <h4>navi</h4>
+            <h1>web file browser</h1>
+            <h3>navi</h3>
             <dir :directory="dirs" :root="true" />
         </div>
         <div class="right">
@@ -33,6 +34,9 @@ export default {
 }
 .left {
     width: 260px;
+}
+h1 {
+    font-size: 28px;
 }
 .right {
     width: 100%;
