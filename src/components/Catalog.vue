@@ -3,7 +3,7 @@
         <div class="headerMenu">
             <div><h3>current:{{current}}</h3></div>
             <ul class="commandContainer">
-                <li><button>create dir</button></li>
+                <li><button @click="onClickCreateDir">create dir</button></li>
                 <li>
                     <template v-if="isEnabledDeleteDir">
                         <button>delete dir</button>
@@ -96,6 +96,17 @@ export default {
             } else {
                 ev.target.classList.remove('active');
             }
+        },
+        onClickCreateDir() {
+            const name = prompt('input name');
+            if (!name || name.length === 0) return;
+            const client = this.$store.getters.client;
+            const path = this.current + '/' + name;
+            client.createDirectory(path).then(async (resp) => {
+                await this.$store.dispatch('setStructure');
+                await this.$store.dispatch('setFiles', this.current);
+                await this.$store.dispatch('setDirectories', this.current);
+            });
         }
     },
     mounted() {
