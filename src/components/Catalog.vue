@@ -27,7 +27,10 @@
             <ul class="dir">
                 <template v-for="(dir, idx) in dirs">
                     <li :key="idx">
-                        <p class="label" @click="onClickDir" ref="label">{{dir.basename}}</p>
+                        <p class="label" @click="onClickDir" @dblclick="onDblClickDir" ref="label">
+                            <input type="hidden" name="dirVal" :value="dir.filename">
+                            {{dir.basename}}
+                        </p>
                     </li>
                 </template>
             </ul>
@@ -36,7 +39,10 @@
             <ul class="file">
                 <template v-for="(file, idx) in files">
                     <li :key="idx">
-                        <p class="label" @click="onClickFile" ref="label">{{file.basename}}</p>
+                        <p class="label" @click="onClickFile" ref="label">
+                            <input type="hidden" name="fileVal" :value="file.filename">
+                            {{file.basename}}
+                        </p>
                     </li>
                 </template>
             </ul>
@@ -76,7 +82,6 @@ export default {
     },
     methods: {
         onClickDir(ev) {
-            ev.preventDefault();
             const label = ev.target.innerText;
             const obj = this.selectedDir.find(e => e.value.basename === label);
             obj.active = !obj.active;
@@ -85,6 +90,11 @@ export default {
             } else {
                 ev.target.classList.remove('active');
             }
+        },
+        onDblClickDir(ev) {
+            const hidden = ev.target.querySelector('input');
+            const path = hidden.value.substring(1).replace(/\//gi, '-');
+            this.$router.push('/catalog/' + path);
         },
         onClickFile(ev) {
             ev.preventDefault();
