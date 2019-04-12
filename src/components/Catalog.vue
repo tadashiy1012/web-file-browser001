@@ -12,7 +12,7 @@
                         <button disabled>delete dir</button>
                     </template>
                 </li>
-                <li><button>upload file</button></li>
+                <li><button @click="onClickUploadFile">upload file</button></li>
                 <li>
                     <template v-if="isEnabledDeleteFile">
                         <button>delete file</button>
@@ -107,6 +107,22 @@ export default {
                 await this.$store.dispatch('setFiles', this.current);
                 await this.$store.dispatch('setDirectories', this.current);
             });
+        },
+        onClickUploadFile() {
+            const infile = document.createElement('input');
+            infile.setAttribute('type', 'file');
+            infile.setAttribute('name', 'upload');
+            infile.addEventListener('change', (ev) => {
+                const file = infile.files[0];
+                this.$store.dispatch('uploadFile', {
+                    path: this.current,
+                    file
+                }).then(async (resp) => {
+                    console.log(resp);
+                    await this.$store.dispatch('setFiles', this.current);
+                });
+            });
+            infile.click();
         }
     },
     mounted() {

@@ -51,6 +51,20 @@ const actions = {
         const contents = await state.client.getDirectoryContents(path);
         const files = contents.filter(e => e.type == 'file');
         commit('setFiles', {files});
+    },
+    uploadFile({state}, {path, file}) {
+        if (!state.client) return;
+        return new Promise((resolve, reject) => {
+            const fr = new FileReader();
+            fr.addEventListener('load', (ev) => {
+                const buf = ev.target.result;
+                const fullPath = path + '/' + file.name;
+                state.client.putFileContents(fullPath, buf).then((resp) => {
+                    resolve(resp);
+                });
+            });
+            fr.readAsArrayBuffer(file);
+        });
     }
 };
 
