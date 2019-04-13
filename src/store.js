@@ -69,6 +69,14 @@ const actions = {
     async deleteDirFile({state}, {path}) {
         if (!state.client) return;
         await state.client.deleteFile(path);
+    },
+    getFile({state}, {path}) {
+        if (!state.client) return;
+        return new Promise((resolve) => {
+            state.client.getFileContents(path).then((resp) => {
+                resolve(resp);
+            });
+        });
     }
 };
 

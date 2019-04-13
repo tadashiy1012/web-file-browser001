@@ -23,7 +23,7 @@
                 </li>
                 <li>
                     <template v-if="isEnabledDownloadFile">
-                        <button>download file</button>
+                        <button @click="onClickDownloadFile">download file</button>
                     </template>
                     <template v-else>
                         <button disabled>download file</button>
@@ -193,6 +193,21 @@ export default {
                 const ary = Array.from(labels);
                 ary.forEach(e => e.classList.remove('active'));
                 await this.$store.dispatch('setFiles', this.current);
+            });
+        },
+        onClickDownloadFile() {
+            const tgt = this.selectedFile.find(e => e.active === true);
+            this.$store.dispatch('getFile', {
+                path: tgt.value.filename
+            }).then((resp) => {
+                console.log(resp);
+                const blob = new Blob([resp.buffer], {type: 'application/octet-stream'});
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.download = tgt.value.basename;
+                a.href = url;
+                a.dataset.downloadurl = ['application/octet-stream', a.download, a.href].join(':');
+                a.click();
             });
         }
     },
