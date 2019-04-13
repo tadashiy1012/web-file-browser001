@@ -65,6 +65,10 @@ const actions = {
             });
             fr.readAsArrayBuffer(file);
         });
+    },
+    async deleteDirFile({state}, {path}) {
+        if (!state.client) return;
+        await state.client.deleteFile(path);
     }
 };
 

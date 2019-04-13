@@ -6,7 +6,7 @@
                 <li><button @click="onClickCreateDir">create dir</button></li>
                 <li>
                     <template v-if="isEnabledDeleteDir">
-                        <button>delete dir</button>
+                        <button @click="onClickDeleteDir">delete dir</button>
                     </template>
                     <template v-else>
                         <button disabled>delete dir</button>
@@ -15,10 +15,18 @@
                 <li><button @click="onClickUploadFile">upload file</button></li>
                 <li>
                     <template v-if="isEnabledDeleteFile">
-                        <button>delete file</button>
+                        <button @click="onClickDeleteFile">delete file</button>
                     </template>
                     <template v-else>
                         <button disabled>delete file</button>
+                    </template>
+                </li>
+                <li>
+                    <template v-if="isEnabledDownloadFile">
+                        <button>download file</button>
+                    </template>
+                    <template v-else>
+                        <button disabled>download file</button>
                     </template>
                 </li>
             </ul>
@@ -56,7 +64,8 @@ export default {
             selectedDir: [],
             selectedFile: [],
             isEnabledDeleteDir: false,
-            isEnabledDeleteFile: false
+            isEnabledDeleteFile: false,
+            isEnabledDownloadFile: false
         };
     },
     computed: {
@@ -160,6 +169,31 @@ export default {
                 });
             });
             infile.click();
+        },
+        onClickDeleteDir() {
+            const tgt = this.selectedDir.find(e => e.active === true);
+            this.$store.dispatch('deleteDirFile', {
+                path: tgt.value.filename
+            }).then(async (resp) => {
+                console.log(resp);
+                const labels = this.$el.querySelectorAll('.label');
+                const ary = Array.from(labels);
+                ary.forEach(e => e.classList.remove('active'));
+                await this.$store.dispatch('setStructure');
+                await this.$store.dispatch('setDirectories', this.current);
+            });
+        },
+        onClickDeleteFile() {
+            const tgt = this.selectedFile.find(e => e.active === true);
+            this.$store.dispatch('deleteDirFile', {
+                path: tgt.value.filename
+            }).then(async (resp) => {
+                console.log(resp);
+                const labels = this.$el.querySelectorAll('.label');
+                const ary = Array.from(labels);
+                ary.forEach(e => e.classList.remove('active'));
+                await this.$store.dispatch('setFiles', this.current);
+            });
         }
     },
     mounted() {
@@ -193,8 +227,10 @@ export default {
                 const active = val.filter(e => e.active === true);
                 if (active.length > 0) {
                     this.isEnabledDeleteFile = true;
+                    this.isEnabledDownloadFile = true;
                 } else {
                     this.isEnabledDeleteFile = false;
+                    this.isEnabledDownloadFile = false;
                 }
             }
         }
