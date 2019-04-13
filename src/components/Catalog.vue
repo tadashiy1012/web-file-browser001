@@ -23,25 +23,25 @@
                 </li>
             </ul>
         </div>
-        <div class="dirContainer">
+        <div id="dirContainer" class="dirContainer">
             <ul class="dir">
                 <template v-for="(dir, idx) in dirs">
                     <li :key="idx">
                         <p class="label" @click="onClickDir" @dblclick="onDblClickDir" ref="label">
                             <input type="hidden" name="dirVal" :value="dir.filename">
-                            {{dir.basename}}
+                            <span class="labelValue">{{dir.basename}}</span>
                         </p>
                     </li>
                 </template>
             </ul>
         </div>
-        <div class="fileContainer">
+        <div id="fileContainer" class="fileContainer">
             <ul class="file">
                 <template v-for="(file, idx) in files">
                     <li :key="idx">
                         <p class="label" @click="onClickFile" ref="label">
                             <input type="hidden" name="fileVal" :value="file.filename">
-                            {{file.basename}}
+                            <span class="labelValue">{{file.basename}}</span>
                         </p>
                     </li>
                 </template>
@@ -82,14 +82,25 @@ export default {
     },
     methods: {
         onClickDir(ev) {
-            const label = ev.target.innerText;
+            const ul = document.getElementById('dirContainer');
+            Array.from(ul.querySelectorAll('li')).forEach(e => {
+                e.querySelector('.label').classList.remove('active');
+            });
+            let tgt = null;
+            if (ev.target.tagName === 'SPAN' || ev.target.tagName === 'span') {
+                tgt = ev.target.parentNode;
+            } else {
+                tgt = ev.target;
+            }
+            const label = tgt.querySelector('.labelValue').innerText;
             const obj = this.selectedDir.find(e => e.value.basename === label);
             obj.active = !obj.active;
             if (obj.active) {
-                ev.target.classList.add('active');
+                tgt.classList.add('active');
             } else {
-                ev.target.classList.remove('active');
+                tgt.classList.remove('active');
             }
+            this.selectedDir.filter(e => e !== obj).forEach(e => e.active = false);
         },
         onDblClickDir(ev) {
             const hidden = ev.target.querySelector('input');
@@ -97,15 +108,25 @@ export default {
             this.$router.push('/catalog/' + path);
         },
         onClickFile(ev) {
-            ev.preventDefault();
-            const label = ev.target.innerText;
+            const ul = document.getElementById('fileContainer');
+            Array.from(ul.querySelectorAll('li')).forEach(e => {
+                e.querySelector('.label').classList.remove('active');
+            });
+            let tgt = null;
+            if (ev.target.tagName === 'SPAN' || ev.target.tagName === 'span') {
+                tgt = ev.target.parentNode;
+            } else {
+                tgt = ev.target;
+            }
+            const label = tgt.querySelector('.labelValue').innerText;
             const obj = this.selectedFile.find(e => e.value.basename === label);
             obj.active = !obj.active;
             if (obj.active) {
-                ev.target.classList.add('active');
+                tgt.classList.add('active');
             } else {
-                ev.target.classList.remove('active');
+                tgt.classList.remove('active');
             }
+            this.selectedFile.filter(e => e !== obj).forEach(e => e.active = false);
         },
         onClickCreateDir() {
             const name = prompt('input name');
@@ -141,7 +162,6 @@ export default {
     },
     watch: {
         current: function(val, old) {
-            console.log(val, old);
             if (val !== old) {
                 this.$store.dispatch('setFiles', this.current);
                 this.$store.dispatch('setDirectories', this.current);
@@ -153,7 +173,6 @@ export default {
         selectedDir: {
             deep: true,
             handler: function(val, old) {
-                console.log(val, old);
                 const active = val.filter(e => e.active === true);
                 if (active.length > 0) {
                     this.isEnabledDeleteDir = true;
@@ -165,7 +184,6 @@ export default {
         selectedFile: {
             deep: true,
             handler: function(val, old) {
-                console.log(val, old);
                 const active = val.filter(e => e.active === true);
                 if (active.length > 0) {
                     this.isEnabledDeleteFile = true;
