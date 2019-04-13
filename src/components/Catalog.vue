@@ -201,7 +201,7 @@ export default {
                 path: tgt.value.filename
             }).then((resp) => {
                 console.log(resp);
-                const blob = new Blob([resp.buffer], {type: 'application/octet-stream'});
+                const blob = new Blob([new Uint8Array(resp).buffer], {type: 'application/octet-stream'});
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.download = tgt.value.basename;
