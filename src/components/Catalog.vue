@@ -103,7 +103,13 @@ export default {
             this.selectedDir.filter(e => e !== obj).forEach(e => e.active = false);
         },
         onDblClickDir(ev) {
-            const hidden = ev.target.querySelector('input');
+            let tgt = null;
+            if (ev.target.tagName === 'SPAN' || ev.target.tagName === 'span') {
+                tgt = ev.target.parentNode;
+            } else {
+                tgt = ev.target;
+            }
+            const hidden = tgt.querySelector('input');
             const path = hidden.value.substring(1).replace(/\//gi, '-');
             this.$router.push('/catalog/' + path);
         },
