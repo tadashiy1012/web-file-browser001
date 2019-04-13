@@ -36,7 +36,7 @@
                 <template v-for="(dir, idx) in dirs">
                     <li :key="idx">
                         <p class="label" @click="onClickDir" @dblclick="onDblClickDir" ref="label">
-                            <input type="hidden" name="dirVal" :value="dir.filename">
+                            <input type="hidden" class="dirBaseVal" name="dirBaseVal" :value="dir.basename">
                             <span class="labelValue">{{dir.basename}}</span>
                         </p>
                     </li>
@@ -48,7 +48,7 @@
                 <template v-for="(file, idx) in files">
                     <li :key="idx">
                         <p class="label" @click="onClickFile" ref="label">
-                            <input type="hidden" name="fileVal" :value="file.filename">
+                            <input type="hidden" class="fileBaseVal" name="fileBaseVal" :value="file.basename">
                             <span class="labelValue">{{file.basename}}</span>
                         </p>
                     </li>
@@ -76,6 +76,7 @@ export default {
         },
         files() {
             const files = this.$store.getters.files;
+            files.sort((a, b) => a.basename < b.basename);
             this.selectedFile = files.map(e => {
                 return {active: false, value: e};
             });
@@ -83,6 +84,7 @@ export default {
         },
         dirs() {
             const dirs = this.$store.getters.directories;
+            dirs.sort((a, b) => a.basename < b.basename);
             this.selectedDir = dirs.map(e => {
                 return {active: false, value: e};
             });
@@ -101,7 +103,7 @@ export default {
             } else {
                 tgt = ev.target;
             }
-            const label = tgt.querySelector('.labelValue').innerText;
+            const label = tgt.querySelector('.dirBaseVal').value;
             const obj = this.selectedDir.find(e => e.value.basename === label);
             obj.active = !obj.active;
             if (obj.active) {
@@ -118,8 +120,8 @@ export default {
             } else {
                 tgt = ev.target;
             }
-            const hidden = tgt.querySelector('input');
-            const path = hidden.value.substring(1).replace(/\//gi, '-');
+            const hidden = tgt.querySelector('.dirBaseVal');
+            const path = hidden.value.replace(/\//gi, '-');
             this.$router.push('/catalog/' + path);
         },
         onClickFile(ev) {
@@ -133,7 +135,7 @@ export default {
             } else {
                 tgt = ev.target;
             }
-            const label = tgt.querySelector('.labelValue').innerText;
+            const label = tgt.querySelector('.fileBaseVal').value;
             const obj = this.selectedFile.find(e => e.value.basename === label);
             obj.active = !obj.active;
             if (obj.active) {
