@@ -4,6 +4,7 @@ import VueRouter from 'vue-router';
 import {createClient} from 'webdav';
 import store from './store';
 import {Base, Catalog} from './components';
+import 'material-design-icons/iconfont/material-icons.css';
 
 Vue.use(Vuex);
 Vue.use(VueRouter);

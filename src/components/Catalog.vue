@@ -37,6 +37,7 @@
                     <li :key="idx">
                         <p class="label" @click="onClickDir" @dblclick="onDblClickDir" ref="label">
                             <input type="hidden" class="dirBaseVal" name="dirBaseVal" :value="dir.basename">
+                            <i class="material-icons">folder</i>
                             <span class="labelValue">{{dir.basename}}</span>
                         </p>
                     </li>
@@ -49,6 +50,7 @@
                     <li :key="idx">
                         <p class="label" @click="onClickFile" ref="label">
                             <input type="hidden" class="fileBaseVal" name="fileBaseVal" :value="file.basename">
+                            <i class="material-icons">insert_drive_file</i>
                             <span class="labelValue">{{file.basename}}</span>
                         </p>
                     </li>
@@ -98,7 +100,8 @@ export default {
                 e.querySelector('.label').classList.remove('active');
             });
             let tgt = null;
-            if (ev.target.tagName === 'SPAN' || ev.target.tagName === 'span') {
+            if (ev.target.tagName === 'SPAN' || ev.target.tagName === 'span' || 
+                    ev.target.tagName === 'I' || ev.target.tagName === 'i') {
                 tgt = ev.target.parentNode;
             } else {
                 tgt = ev.target;
@@ -115,7 +118,8 @@ export default {
         },
         onDblClickDir(ev) {
             let tgt = null;
-            if (ev.target.tagName === 'SPAN' || ev.target.tagName === 'span') {
+            if (ev.target.tagName === 'SPAN' || ev.target.tagName === 'span' ||
+                    ev.target.tagName === 'I' || ev.target.tagName === 'i') {
                 tgt = ev.target.parentNode;
             } else {
                 tgt = ev.target;
@@ -130,7 +134,8 @@ export default {
                 e.querySelector('.label').classList.remove('active');
             });
             let tgt = null;
-            if (ev.target.tagName === 'SPAN' || ev.target.tagName === 'span') {
+            if (ev.target.tagName === 'SPAN' || ev.target.tagName === 'span' ||
+                    ev.target.tagName === 'I' || ev.target.tagName === 'i') {
                 tgt = ev.target.parentNode;
             } else {
                 tgt = ev.target;
@@ -284,6 +289,9 @@ export default {
 }
 .label {
     margin: 0px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }
 .label:hover {
     cursor: pointer;
