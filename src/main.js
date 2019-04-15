@@ -25,7 +25,10 @@ const app = new Vue({
     router,
     template: '<router-view />',
     created: async function() {
-        const client = createClient('http://localhost:3000/webdav');
+        const client = createClient('http://localhost:3000/webdav', {
+            username: 'yama',
+            password: 'hogefuga'
+        });
         await this.$store.dispatch('setClient', client);
         await this.$store.dispatch('setStructure');
     }
