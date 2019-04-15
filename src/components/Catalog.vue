@@ -78,7 +78,7 @@ export default {
         },
         files() {
             const files = this.$store.getters.files;
-            files.sort((a, b) => a.basename < b.basename);
+            files.sort((a, b) => a.basename < b.basename ? -1 : 1);
             this.selectedFile = files.map(e => {
                 return {active: false, value: e};
             });
@@ -86,7 +86,7 @@ export default {
         },
         dirs() {
             const dirs = this.$store.getters.directories;
-            dirs.sort((a, b) => a.basename < b.basename);
+            dirs.sort((a, b) => a.basename < b.basename ? -1 : 1);
             this.selectedDir = dirs.map(e => {
                 return {active: false, value: e};
             });
@@ -125,7 +125,8 @@ export default {
                 tgt = ev.target;
             }
             const hidden = tgt.querySelector('.dirBaseVal');
-            const path = hidden.value.replace(/\//gi, '-');
+            const path = (this.current.substring(1) + 
+                (this.current === '/' ? '' : '/') + hidden.value).replace(/\//gi, '-');
             this.$router.push('/catalog/' + path);
         },
         onClickFile(ev) {
