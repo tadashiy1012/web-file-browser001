@@ -1,32 +1,63 @@
 <template>
     <div>
         <div class="headerMenu">
-            <div><h3>current:{{current}}</h3></div>
+            <div><h3>
+                <i class="material-icons">folder_open</i>
+                <span>current:{{current}}</span>
+            </h3></div>
             <ul class="commandContainer">
-                <li><button @click="onClickCreateDir">create dir</button></li>
+                <li>
+                    <button class="commandButton" @click="onClickCreateDir">
+                        <i class="material-icons">create_new_folder</i>
+                        <span>create dir</span>
+                    </button>
+                </li>
                 <li>
                     <template v-if="isEnabledDeleteDir">
-                        <button @click="onClickDeleteDir">delete dir</button>
+                        <button class="commandButton" @click="onClickDeleteDir">
+                            <i class="material-icons">delete</i>
+                            <span>delete dir</span>
+                        </button>
                     </template>
                     <template v-else>
-                        <button disabled>delete dir</button>
+                        <button disabled class="commandButton">
+                            <i class="material-icons">delete</i>
+                            <span>delete dir</span>
+                        </button>
                     </template>
                 </li>
-                <li><button @click="onClickUploadFile">upload file</button></li>
+                <li>
+                    <button class="commandButton" @click="onClickUploadFile">
+                        <i class="material-icons">publish</i>
+                        <span>upload file</span>
+                    </button>
+                </li>
                 <li>
                     <template v-if="isEnabledDeleteFile">
-                        <button @click="onClickDeleteFile">delete file</button>
+                        <button class="commandButton" @click="onClickDeleteFile">
+                            <i class="material-icons">delete</i>
+                            <span>delete file</span>
+                        </button>
                     </template>
                     <template v-else>
-                        <button disabled>delete file</button>
+                        <button disabled class="commandButton">
+                            <i class="material-icons">delete</i>
+                            <span>delete file</span>
+                        </button>
                     </template>
                 </li>
                 <li>
                     <template v-if="isEnabledDownloadFile">
-                        <button @click="onClickDownloadFile">download file</button>
+                        <button class="commandButton" @click="onClickDownloadFile">
+                            <i class="material-icons">get_app</i>
+                            <span>download file</span>
+                        </button>
                     </template>
                     <template v-else>
-                        <button disabled>download file</button>
+                        <button disabled class="commandButton">
+                            <i class="material-icons">get_app</i>
+                            <span>download file</span>
+                        </button>
                     </template>
                 </li>
             </ul>
@@ -299,5 +330,10 @@ export default {
 }
 .label.active {
     background-color: lightskyblue;
+}
+.commandButton {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }
 </style>

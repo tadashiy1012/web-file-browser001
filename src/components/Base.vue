@@ -2,7 +2,10 @@
     <div class="baseContainer">
         <div class="left">
             <h1>web file browser</h1>
-            <h3>navi</h3>
+            <h3>
+                <i class="material-icons">navigation</i>
+                <span>navi</span>
+            </h3>
             <dir :directory="dirs" :root="true" />
         </div>
         <div class="right">
