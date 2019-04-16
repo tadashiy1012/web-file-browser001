@@ -92,4 +92,18 @@ app.get('/logout', (req, res) => {
     res.send('ok');
 });
 
+app.post('/registration', upload.none(), async (req, res) => {
+    const name = req.body.name;
+    const password = req.body.password;
+    const doc = {name, password};
+    try {
+        await putDb(doc);
+        await loadUsers(userManager, privilegeManager);
+    } catch (err) {
+        console.log(err);
+        res.status(500).send('ng');
+    }
+    res.send('ok');
+});
+
 app.listen(3000, () => console.log('server start on 3000'));

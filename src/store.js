@@ -94,6 +94,22 @@ const actions = {
         await dispatch('setLogged', false);
         return true;
     },
+    async doRegistration({}, {name, password}) {
+        const fd = new FormData();
+        fd.append('name', name);
+        fd.append('password', password);
+        const opt = {
+            method: 'POST',
+            body: fd
+        };
+        const resp = await fetch('/registration', opt);
+        const text = await resp.text();
+        if (text === 'ok') {
+            return true;
+        } else {
+            return false;
+        }
+    },
     setLogged({commit}, payload) {
         commit('setLogged', {logged: payload});
     },

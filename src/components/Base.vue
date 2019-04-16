@@ -4,6 +4,7 @@
             <h1>web file browser</h1>
             <div>
                 <template v-if="logged">
+                    <p class="userContainer">user:{{name}}</p>
                     <button @click="onClickLogout">logout</button>    
                 </template>    
             </div>
@@ -25,6 +26,9 @@ export default {
     computed: {
         logged() {
             return this.$store.getters.logged;
+        },
+        name() {
+            return this.$store.getters.name;
         },
         current() {
             let path = this.$route.params.path;
@@ -72,6 +76,9 @@ export default {
 }
 h1 {
     font-size: 28px;
+}
+.userContainer {
+    margin: 0px;
 }
 .right {
     width: 100%;
