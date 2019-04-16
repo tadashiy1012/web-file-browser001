@@ -53,6 +53,8 @@ const rootDir = path.join(__dirname, 'storage');
 
 server.setFileSystemSync('/', new webdav.PhysicalFileSystem(rootDir));
 
+const upload = multer();
+
 const app = express();
 app.set('trust proxy', 1);
 app.set('ejs', ejs.renderFile);
@@ -68,6 +70,26 @@ app.use(webdav.extensions.express('/webdav', server));
 
 app.get('/', (req, res) => {
     res.render('index.ejs', {});
+});
+
+app.post('/login', upload.none(), (req, res) => {
+    const name = req.body.name;
+    const pass = req.body.password;
+    req.session.name = name;
+    req.session.pass = pass;
+    res.send('ok');
+});
+
+app.get('/logged', (req, res) => {
+    res.send({
+        name: req.session.name, 
+        pass: req.session.pass
+    });
+});
+
+app.get('/logout', (req, res) => {
+    req.session.destroy();
+    res.send('ok');
 });
 
 app.listen(3000, () => console.log('server start on 3000'));

@@ -1,9 +1,8 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import VueRouter from 'vue-router';
-import {createClient} from 'webdav';
 import store from './store';
-import {Base, Catalog} from './components';
+import {Base, Catalog, Login} from './components';
 import 'material-design-icons/iconfont/material-icons.css';
 
 Vue.use(Vuex);
@@ -16,7 +15,8 @@ const router = new VueRouter({
             {path: '/catalog', component: Catalog},
             {path: '/catalog/:path', component: Catalog}
         ]},
-        {path: '/home', component: Base}
+        {path: '/home', component: Base},
+        {path: '/login', component: Login}
     ]
 })
 
@@ -24,14 +24,7 @@ const app = new Vue({
     store: new Vuex.Store(store),
     router,
     template: '<router-view />',
-    created: async function() {
-        const client = createClient('http://localhost:3000/webdav', {
-            username: 'yama',
-            password: 'hogefuga'
-        });
-        await this.$store.dispatch('setClient', client);
-        await this.$store.dispatch('setStructure');
-    }
+    mounted() {}
 }).$mount('#app');
 
 console.log(app);

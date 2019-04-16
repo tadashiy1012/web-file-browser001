@@ -94,6 +94,7 @@
 export default {
     data() {
         return {
+            client: this.$store.getters.client,
             selectedDir: [],
             selectedFile: [],
             isEnabledDeleteDir: false,
